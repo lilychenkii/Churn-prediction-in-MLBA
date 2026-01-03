@@ -1,0 +1,1455 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Food Delivery – Customer Churn Prediction</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <script src="/fod-del/asset/js/admin_auth.js"></script>
+  
+
+  <style>
+    :root { 
+      --bg:#fef3f4; 
+      --panel:#ffffff; 
+      --muted:#94a3b8; 
+      --txt:#1e293b; 
+      --accent:#ec4899;
+      --accent-hover:#db2777;
+      --border:#fce7f3;
+      --input-bg:#fdf2f8;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:linear-gradient(135deg,var(--bg) 0%, #fff5f7 50%, #fef3f4 100%);
+      color:var(--txt);
+      font-family:'Segoe UI',Inter,system-ui,Roboto,Arial,sans-serif;
+      min-height:100vh
+    }
+    header {
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid var(--border);
+  padding: 14px 28px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 12px rgba(236,72,153,.08);
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-logo-img {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+}
+
+.header-left h1 {
+  margin: 0;
+  font-size: 22px;
+  color: #be185d;
+  font-weight: 700;
+}
+
+.header-right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.header-btn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 2px solid var(--accent);
+  background: white;
+  color: var(--accent);
+  font-weight: 600;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.header-btn:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.header-btn.logout {
+  border-color: #f43f5e;
+  color: #f43f5e;
+}
+
+.header-btn.logout:hover {
+  background: #f43f5e;
+  color: white;
+}
+
+    h1{
+      margin:0;
+      font-size:24px;
+      font-weight:700;
+      color:#be185d;
+      display:flex;
+      align-items:center;
+      gap:10px
+    }
+    h1:before{content:'';font-size:28px}
+    main{max-width:1100px;margin:30px auto;padding:0 20px}
+    .card{
+      background:var(--panel);
+      border:2px solid var(--border);
+      border-radius:20px;
+      padding:28px;
+      box-shadow:0 4px 20px rgba(236,72,153,.12)
+    }
+    .row{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:18px;
+      margin-top:20px
+    }
+    label{
+      font-size:13px;
+      font-weight:600;
+      color:#64748b;
+      display:block;
+      margin-bottom:8px;
+      text-transform:uppercase;
+      letter-spacing:.5px
+    }
+    input,select{
+      width:100%;
+      padding:12px 16px;
+      border-radius:12px;
+      border:2px solid var(--border);
+      background:var(--input-bg);
+      color:var(--txt);
+      outline:none;
+      font-size:15px;
+      transition:all .2s ease
+    }
+    input:focus,select:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 3px rgba(236,72,153,.15);
+      background:#fff
+    }
+    .btn{
+      background:var(--accent);
+      color:#fff;
+      border:0;
+      border-radius:12px;
+      padding:10px 20px;
+      font-weight:700;
+      cursor:pointer;
+      font-size:14px;
+      transition:all .2s ease;
+      box-shadow:0 4px 12px rgba(236,72,153,.25)
+    }
+    .btn:hover:not(:disabled){
+      background:var(--accent-hover);
+      transform:translateY(-1px);
+      box-shadow:0 6px 16px rgba(236,72,153,.35)
+    }
+    .btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    .btn.secondary{
+      background:#f1f5f9;
+      color:#475569;
+      box-shadow:0 2px 8px rgba(0,0,0,.08)
+    }
+    .btn.secondary:hover:not(:disabled){
+      background:#e2e8f0;
+      transform:translateY(-1px)
+    }
+    .actions{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap}
+    .muted{color:var(--muted);font-size:13px}
+    .result{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      margin-top:24px;
+      padding-top:24px;
+      border-top:2px solid var(--border)
+    }
+    .json{
+      white-space:pre-wrap;
+      background:var(--input-bg);
+      border:2px dashed var(--border);
+      border-radius:12px;
+      padding:16px;
+      font-size:13px;
+      font-family:Monaco,'Courier New',monospace
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:8px 16px;
+      border-radius:20px;
+      font-weight:700;
+      font-size:13px;
+      border:2px solid;
+      letter-spacing:.3px
+    }
+    .risk-low{color:#15803d;border-color:#bbf7d0;background:#f0fdf4}
+    .risk-med{color:#b45309;border-color:#fde68a;background:#fefce8}
+    .risk-high{color:#dc2626;border-color:#fecaca;background:#fef2f2}
+    
+    /* Retention Strategy Cards */
+    .strategy-header{
+      background:linear-gradient(135deg,#ec4899,#db2777);
+      color:white;
+      padding:20px 24px;
+      border-radius:16px 16px 0 0;
+      margin:-28px -28px 20px -28px
+    }
+    .strategy-header h3{
+      margin:0 0 8px 0;
+      font-size:20px;
+      font-weight:700
+    }
+    .strategy-header .prob{
+      font-size:32px;
+      font-weight:800;
+      margin:8px 0
+    }
+    .action-cards{
+      display:grid;
+      gap:14px;
+      margin-top:16px
+    }
+    .action-card{
+      background:#ffffff;
+      border:2px solid var(--border);
+      border-radius:14px;
+      padding:18px 20px;
+      transition:all .3s ease;
+      position:relative;
+      overflow:hidden
+    }
+    .action-card:before{
+      content:'';
+      position:absolute;
+      left:0;
+      top:0;
+      bottom:0;
+      width:5px;
+      background:linear-gradient(180deg,#ec4899,#db2777);
+      border-radius:14px 0 0 14px
+    }
+    .action-card:hover{
+      transform:translateY(-2px);
+      box-shadow:0 8px 24px rgba(236,72,153,.2);
+      border-color:#ec4899
+    }
+    .action-title{
+      font-size:15px;
+      font-weight:700;
+      color:#1e293b;
+      margin-bottom:8px;
+      padding-left:12px
+    }
+    .action-success{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:13px;
+      color:#64748b;
+      padding-left:12px
+    }
+    .success-bar{
+      flex:1;
+      height:8px;
+      background:#f1f5f9;
+      border-radius:999px;
+      overflow:hidden;
+      position:relative
+    }
+    .success-fill{
+      height:100%;
+      background:linear-gradient(90deg,#10b981,#059669);
+      border-radius:999px;
+      transition:width .6s ease
+    }
+    .success-pct{
+      font-weight:700;
+      color:#15803d;
+      min-width:48px;
+      text-align:right
+    }
+    .no-actions{
+      text-align:center;
+      padding:32px;
+      color:var(--muted);
+      font-style:italic
+    }
+    .ok{color:#15803d;font-weight:600}
+    .err{color:#dc2626;font-weight:600}
+    
+    /* Enhanced Result Display */
+    .result-card{
+      background:#ffffff;
+      border:2px solid var(--border);
+      border-radius:14px;
+      padding:20px;
+      margin-top:20px
+    }
+    .result-header{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:16px;
+      padding-bottom:16px;
+      border-bottom:2px solid var(--border)
+    }
+    .confidence-indicator{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 14px;
+      border-radius:12px;
+      font-size:12px;
+      font-weight:600;
+      background:#f0fdf4;
+      color:#15803d;
+      border:2px solid #bbf7d0
+    }
+    .confidence-indicator.medium{
+      background:#fefce8;
+      color:#b45309;
+      border-color:#fde68a
+    }
+    .confidence-indicator.low{
+      background:#fef2f2;
+      color:#dc2626;
+      border-color:#fecaca
+    }
+    .toprow{
+      display:flex;
+      gap:16px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-bottom:16px;
+      padding-bottom:16px;
+      border-bottom:2px solid var(--border)
+    }
+    .grow{flex:1}
+    @media(max-width:768px){
+      .row{grid-template-columns:1fr}
+      h1{font-size:20px}
+      .strategy-header .prob{font-size:24px}
+      .action-card{padding:14px 16px}
+    }
+
+    /* Animations */
+    @keyframes slideIn{
+      from{
+        opacity:0;
+        transform:translateX(-20px)
+      }
+      to{
+        opacity:1;
+        transform:translateX(0)
+      }
+    }
+
+    /* Tabs */
+    .tabs{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+    .tab-btn{
+      padding:10px 16px;
+      border-radius:999px;
+      border:2px solid var(--border);
+      background:#ffffff;
+      cursor:pointer;
+      font-size:14px;
+      display:flex;
+      align-items:center;
+      gap:6px
+    }
+    .tab-btn.active{
+      background:var(--accent);
+      color:#ffffff;
+      border-color:var(--accent)
+    }
+    .tab{display:none}
+    .tab.active{display:block}
+
+    table{
+      border-collapse:collapse;
+      width:100%;
+      font-size:14px
+    }
+    th,td{
+      border:1px solid #e5e7eb;
+      padding:8px 10px;
+      text-align:left
+    }
+    th{
+      background:#f9fafb;
+      font-weight:600
+    }
+    .header-logo {
+    display: flex;
+    align-items: center;
+    height: var(--header-height);
+}
+
+.header-logo img {
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+}
+  </style>
+</head>
+<body>
+<header>
+  <div class="header-container">
+    
+    <!-- LEFT: LOGO + TITLE -->
+    <div class="header-left">
+      <img src="/fod-del/models/static/Logo.png" class="header-logo-img"/>
+      <h1>Food Delivery - Customer Churn Prediction</h1>
+    </div>
+
+    <!-- RIGHT: ACTION BUTTONS -->
+    <div class="header-right">
+      <button id="btnLogout" class="header-btn logout">Logout</button>
+      <button id="btnTrain" class="header-btn">Train & Export</button>
+      <div id="trainingStatus" style="
+  margin-top: 10px; 
+  font-size: 14px; 
+  color: #be185d; 
+  font-weight: 600;">
+</div>
+
+      <button id="btnDownloadCSV" class="header-btn">Download CSV</button>
+    </div>
+
+  </div>
+</header>
+
+
+<main>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab(event,'predictTab')"> Predict Churn</button>
+    <button class="tab-btn" onclick="showTab(event,'kmeansTab')"> KMeans Clustering</button>
+     <button class="tab-btn" onclick="showTab(event,'clusterListTab')"> Cluster Details</button>
+     <button class="tab-btn" onclick="showTab(event,'whatIfTab')"> What-If Analysis</button>
+     <button class="tab-btn" onclick="showTab(event,'retentionTab')"> Retention Strategy</button>
+    <button class="tab-btn" onclick="showTab(event,'predictionsTab')"> Predictions</button>
+  </div>
+
+  <!-- TAB 1: PREDICT -->
+  <div id="predictTab" class="tab active">
+    <section class="card">
+      <div class="toprow">
+        <div class="grow">
+          <div id="health" class="muted">Checking backend…</div>
+        </div>
+        <div>
+          <label>Model (in .zip)</label>
+          <select id="modelSelect">
+            <option value="">Best in zip</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label>Gender</label>
+          <select id="gender">
+            <option>Male</option>
+            <option>Female</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Number of Orders</label>
+          <input type="number" id="num_orders" placeholder="E.g: 5" min="0" step="1">
+        </div>
+
+        <div>
+          <label>Average Order Value (VND)</label>
+          <input type="number" id="avg_order_value" placeholder="E.g: 180000" min="0" step="1">
+        </div>
+
+        <div>
+          <label>Cancel Rate (0–1)</label>
+          <input type="number" id="cancel_rate" placeholder="E.g: 0.2" min="0" max="1" step="0.01">
+        </div>
+
+        <div>
+          <label>Voucher Usage Rate (0–1)</label>
+          <input type="number" id="voucher_usage_rate" placeholder="E.g: 0.5" min="0" max="1" step="0.01">
+        </div>
+
+        <div>
+          <label>Average Rating (0–5)</label>
+          <input type="number" id="avg_rating" placeholder="E.g: 4.2" min="0" max="5" step="0.1">
+        </div>
+
+        <div>
+          <label>Loyalty Tier</label>
+          <select id="loyalty_tier">
+            <option>Bronze</option>
+            <option>Silver</option>
+            <option>Gold</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Age</label>
+          <input type="number" id="age" placeholder="E.g: 28" min="0" step="1">
+        </div>
+
+        <div>
+          <label>City Zone</label>
+          <select id="city_zone">
+            <option>Urban</option>
+            <option>Suburban</option>
+            <option>Rural</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Inactive Days</label>
+          <input type="number" id="inactive_days" placeholder="E.g: 14" min="0" step="1">
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="btnPredict">Predict</button>
+        <button class="btn secondary" id="btnClear">Clear</button>
+      </div>
+
+      <div class="result">
+        <div id="pretty" class="muted">Results will appear here…</div>
+        <div id="json" class="json"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- TAB 2: KMEANS – CHURN RATE -->
+  <div id="kmeansTab" class="tab">
+    <section class="card">
+      <h2>K-Means Clustering – Churn Rate</h2>
+      <p class="muted">Customer churn rate by K-Means cluster.</p>
+
+      <button class="btn" type="button" onclick="loadKMeans()">Run K-Means</button>
+
+      <div style="margin-top:20px;max-height:380px;">
+        <canvas id="chartKMeans"></canvas>
+      </div>
+
+      <h3 style="margin-top:24px;">Summary by Cluster</h3>
+      <div style="max-width:480px;margin-top:10px;">
+        <table id="clusterSummaryTable">
+          <thead>
+            <tr>
+              <th>Cluster</th>
+              <th>Churn Rate</th>
+              <th>Churn Count</th>
+              <th>Total Customers</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+            <h3 style="margin-top:32px;">Top Customers by Risk Level</h3>
+      <p class="muted">
+        Based on the current classification model. Choose risk bucket and Top N customers.
+      </p>
+
+      <div class="actions" style="align-items:center;flex-wrap:wrap;margin-top:10px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="muted">Risk bucket:</span>
+          <select id="riskBucketSelect" style="padding:8px 10px;border-radius:12px;border:2px solid var(--border);background:var(--input-bg);">
+            <option value="high">High risk</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low risk</option>
+          </select>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="muted">Top N:</span>
+          <input type="number" id="topNInput" value="20" min="1" step="1"
+                 style="width:90px;padding:8px 10px;font-size:14px;">
+        </div>
+
+        <button class="btn secondary" type="button" onclick="loadTopRisk()">Get List</button>
+              <!-- Bảng hiển thị Top N khách hàng theo risk -->
+      <div style="margin-top:20px;max-height:380px;overflow:auto;">
+        <table id="topRiskTable">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      </div>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- TAB 3: CLUSTER LIST -->
+  <div id="clusterListTab" class="tab">
+    <section class="card">
+      <h2>Customers by Cluster</h2>
+      <p class="muted">Each customer is assigned to a cluster based on ordering behavior.</p>
+
+      <div class="actions" style="align-items:center;flex-wrap:wrap;">
+        <button class="btn" type="button" onclick="loadClusterList()">Load List</button>
+
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="muted">Filter by Cluster:</span>
+          <select id="clusterFilter">
+            <option value="">All</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-top:18px;max-height:420px;overflow:auto;">
+        <table>
+          <thead id="clusterListHead">
+            <!-- rendered by JS -->
+          </thead>
+          <tbody id="clusterListBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- TAB 4: WHAT-IF ANALYTICS -->
+  <div id="whatIfTab" class="tab">
+    <section class="card">
+      <h2>What-If Analysis – Support Response Time</h2>
+      <p class="muted">
+        Simulation: if we reduce customer support response time, how will the churn probability change?
+        Example: from <b>24 hours</b> down to <b>12 hours</b>.
+      </p>
+
+      <div class="row">
+        <div>
+          <label>Number of Orders</label>
+          <input type="number" id="wh_num_orders" min="0" step="1" placeholder="E.g: 5">
+        </div>
+
+        <div>
+          <label>Average Order Value</label>
+          <input type="number" id="wh_avg_order_value" min="0" step="1" placeholder="E.g: 180000">
+        </div>
+
+        <div>
+          <label>Loyalty Tier</label>
+          <select id="wh_loyalty_tier">
+            <option>Bronze</option>
+            <option>Silver</option>
+            <option>Gold</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Current Response Time (hours)</label>
+          <input type="number" id="wh_resp_before" value="24" min="0" step="1">
+        </div>
+
+        <div>
+          <label>Target Response Time (hours)</label>
+          <input type="number" id="wh_resp_after" value="12" min="0" step="1">
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" type="button" onclick="runWhatIf()">Run Simulation</button>
+      </div>
+
+      <div class="result">
+        <div id="whatIfPretty" class="muted">Simulation results will appear here…</div>
+        <div id="whatIfJson" class="json"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- TAB 5: RETENTION STRATEGY -->
+  <div id="retentionTab" class="tab">
+    <section class="card">
+      <h2>Retention Strategy Recommendation</h2>
+      <p class="muted">
+        Suggested actions to reduce churn – based on customer profile, behavior & churn probability.
+      </p>
+
+      <button class="btn" onclick="runRetention()">Get Strategy Recommendation</button>
+
+      <div id="retentionResult" style="margin-top:16px;"></div>
+      <div id="retentionJson" class="json"></div>
+    </section>
+  </div>
+
+  <!-- TAB 6: PREDICTIONS (preview & filters) -->
+  <div id="predictionsTab" class="tab">
+    <section class="card">
+      <h2>Model Predictions</h2>
+      <p class="muted">Preview exported predictions (table) and filter by model or risk bucket.</p>
+
+      <div class="row">
+        <div>
+          <label>Model Filter</label>
+          <select id="predModelFilter">
+            <option value="">(All models)</option>
+          </select>
+        </div>
+        <div>
+          <label>Risk Bucket</label>
+          <select id="predBucketFilter">
+            <option value="all">All</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:8px;">
+          <button class="btn" id="btnRefreshPred">Refresh</button>
+          <button class="btn" id="btnGetList">Get List</button>
+          <button class="btn secondary" id="btnDownloadPredCSV">Download CSV</button>
+        </div>
+      </div>
+
+      <div id="predictionsTableContainer" style="margin-top:16px;max-height:520px;overflow:auto;"></div>
+    </section>
+  </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // ⚙️ Backend API base (Flask)
+  const API_BASE = "http://127.0.0.1:5000";
+
+  const $ = id => document.getElementById(id);
+  const health = $("health");
+  const modelSelect = $("modelSelect");
+  const pretty = $("pretty");
+  const jsonBox = $("json");
+  const btnPredict = $("btnPredict");
+  const btnClear = $("btnClear");
+
+  function num(v) {
+    if (v === "" || v == null) return null;
+    const x = Number(v);
+    return isNaN(x) ? null : x;
+  }
+
+  function getPayload() {
+    const p = {};
+    p.gender = $("gender").value;
+    p.num_orders = num($("num_orders").value);
+    p.avg_order_value = num($("avg_order_value").value);
+    p.cancel_rate = num($("cancel_rate").value);
+    p.voucher_usage_rate = num($("voucher_usage_rate").value);
+    p.avg_rating = num($("avg_rating").value);
+    p.loyalty_tier = $("loyalty_tier").value;
+    p.age = num($("age").value);
+    p.city_zone = $("city_zone").value;
+    p.inactive_days = num($("inactive_days").value);
+    return p;
+  }
+
+  function validate(p) {
+    const errs = [];
+    if (p.cancel_rate != null && (p.cancel_rate < 0 || p.cancel_rate > 1))
+      errs.push("cancel_rate must be in [0,1]");
+    if (p.voucher_usage_rate != null && (p.voucher_usage_rate < 0 || p.voucher_usage_rate > 1))
+      errs.push("voucher_usage_rate must be in [0,1]");
+    if (p.avg_rating != null && (p.avg_rating < 0 || p.avg_rating > 5))
+      errs.push("avg_rating must be in [0,5]");
+    if (p.num_orders != null && p.num_orders < 0)
+      errs.push("num_orders ≥ 0");
+    if (p.avg_order_value != null && p.avg_order_value < 0)
+      errs.push("avg_order_value ≥ 0");
+    if (p.age != null && p.age < 0)
+      errs.push("age ≥ 0");
+    if (p.inactive_days != null && p.inactive_days < 0)
+      errs.push("inactive_days ≥ 0");
+    return errs;
+  }
+
+  function riskBadge(bucket, prob) {
+    const pct = (prob * 100).toFixed(2) + "%";
+    if (bucket === "high") return `<span class="badge risk-high">High • ${pct}</span>`;
+    if (bucket === "medium") return `<span class="badge risk-med">Medium • ${pct}</span>`;
+    return `<span class="badge risk-low">Low • ${pct}</span>`;
+  }
+
+  // ===== Models & Health =====
+  async function refreshModels() {
+    try {
+      const r = await fetch(`${API_BASE}/models`);
+      if (!r.ok) return;
+      const j = await r.json();
+      if (Array.isArray(j.available_models)) {
+        modelSelect.innerHTML = `<option value="">(Best in zip)</option>`;
+        const pm = document.getElementById('predModelFilter');
+        if (pm) pm.innerHTML = `<option value="">(All models)</option>`;
+        j.available_models.forEach(m => {
+          if (m === "kmeans") return; // không cho chọn kmeans ở predict
+          const opt = document.createElement("option");
+          opt.value = m;
+          opt.textContent = m;
+          modelSelect.appendChild(opt);
+          if (pm) {
+            const popt = document.createElement('option');
+            popt.value = m;
+            popt.textContent = m;
+            pm.appendChild(popt);
+          }
+        });
+        if (j.best_in_zip && modelSelect.querySelector(`option[value="${j.best_in_zip}"]`)) {
+          modelSelect.value = j.best_in_zip;
+        }
+      }
+    } catch (e) {
+      console.warn("refreshModels error:", e);
+    }
+  }
+
+  async function refreshHealth() {
+    try {
+      const m = modelSelect.value;
+      const r = await fetch(
+        m ? `${API_BASE}/health?model=${encodeURIComponent(m)}` 
+          : `${API_BASE}/health`
+      );
+      const j = await r.json();
+      if (j.status === "ok") {
+        health.innerHTML = `<span class="ok">✓ Backend OK</span> • Model: <b>${j.model_name || "(best)"}</b> • File: ${j.loaded_from || "(zip)"}`;
+      } else {
+        health.innerHTML = `<span class="err">✗ Backend Error:</span> ${j.message || "unknown"}`;
+      }
+    } catch (e) {
+      health.innerHTML = `<span class="err">✗ Cannot connect to backend:</span> ${e.message}`;
+    }
+  }
+
+  modelSelect.addEventListener("change", refreshHealth);
+
+  // ===== Train & Export =====
+  const btnTrain = document.getElementById('btnTrain');
+  const trainingStatus = document.getElementById('trainingStatus');
+
+  async function pollTrainStatus() {
+    try {
+      const r = await fetch(`${API_BASE}/train_status`);
+      if (!r.ok) return null;
+      return await r.json();
+    } catch (e) {
+      return null;
+    }
+  }
+
+  btnTrain.addEventListener('click', async () => {
+    if (!confirm('Start training and export models+predictions? This may take several minutes.')) return;
+    btnTrain.disabled = true;
+    trainingStatus.textContent = 'Starting training...';
+    try {
+      const modelToTrain = document.getElementById('trainModelSelect') ? document.getElementById('trainModelSelect').value : '';
+      const url = modelToTrain ? `${API_BASE}/train_and_export?model=${encodeURIComponent(modelToTrain)}` : `${API_BASE}/train_and_export`;
+      const r = await fetch(url, { method: 'POST' });
+      if (r.status === 202) {
+        trainingStatus.textContent = 'Training started. Polling status...';
+      } else if (r.status === 409) {
+        trainingStatus.textContent = 'Training already running.';
+        btnTrain.disabled = false;
+        return;
+      } else {
+        const j = await r.json().catch(() => ({}));
+        trainingStatus.textContent = 'Failed to start training: ' + (j.error || r.statusText);
+        btnTrain.disabled = false;
+        return;
+      }
+
+      // Poll until done
+      let status = null;
+      while (true) {
+        await new Promise(res => setTimeout(res, 2000));
+        status = await pollTrainStatus();
+        if (!status) { trainingStatus.textContent = 'No status yet...'; continue; }
+        trainingStatus.textContent = `Status: ${status.status}` + (status.message ? ` — ${status.message}` : '');
+        if (status.status !== 'running') break;
+      }
+
+      if (status && status.status === 'done') {
+        alert('Training completed successfully. Models zipped and predictions exported.');
+        // refresh model list and health
+        await refreshModels();
+        await refreshHealth();
+        // after training, jump to Predictions tab
+        showTab(null, 'predictionsTab');
+        await loadPredictions();
+      } else if (status && status.status === 'error') {
+        alert('Training failed: ' + (status.message || 'unknown'));
+      }
+    } catch (e) {
+      trainingStatus.textContent = 'Error starting training: ' + e.message;
+    } finally {
+      btnTrain.disabled = false;
+    }
+  });
+
+  // ===== Predictions Tab logic =====
+  async function loadPredictions() {
+    const container = document.getElementById('predictionsTableContainer');
+    if (!container) return;
+    const limit = 200;
+    const modelFilter = document.getElementById('predModelFilter').value;
+    const bucketFilter = document.getElementById('predBucketFilter').value;
+    let url = `${API_BASE}/churn_cus_rows?limit=${limit}`;
+    try {
+      const r = await fetch(url);
+      if (!r.ok) {
+        container.innerHTML = '<div class="muted">Failed to load predictions.</div>';
+        return;
+      }
+      const j = await r.json();
+      let rows = j.rows || [];
+      if (modelFilter) rows = rows.filter(r => (r.model_name || '') === modelFilter);
+      if (bucketFilter && bucketFilter !== 'all') rows = rows.filter(r => (r.risk_bucket || '').toLowerCase() === bucketFilter);
+
+      // render table
+      const cols = j.columns || (rows.length ? Object.keys(rows[0]) : []);
+      let html = '<table style="width:100%;border-collapse:collapse">';
+      html += '<thead><tr>' + cols.map(c => `<th style="border:1px solid #eee;padding:6px;background:#f9fafb">${c}</th>`).join('') + '</tr></thead>';
+      html += '<tbody>' + rows.map(r => '<tr>' + cols.map(c => `<td style="border:1px solid #eee;padding:6px">${String(r[c]===undefined?'':r[c])}</td>`).join('') + '</tr>').join('') + '</tbody>';
+      html += '</table>';
+      container.innerHTML = html;
+    } catch (e) {
+      container.innerHTML = '<div class="muted">Error loading predictions.</div>';
+    }
+  }
+
+  // Populate predModelFilter from churn_cus table (exported models)
+  async function refreshPredModelFilter() {
+    const pm = document.getElementById('predModelFilter');
+    if (!pm) return;
+    try {
+      const r = await fetch(`${API_BASE}/churn_models`);
+      if (!r.ok) return;
+      const j = await r.json();
+      if (!j.models) return;
+      pm.innerHTML = `<option value="">(All models)</option>`;
+      j.models.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m;
+        opt.textContent = m;
+        pm.appendChild(opt);
+      });
+    } catch (e) {
+      // ignore
+    }
+  }
+
+    // Tab Predictions – nút show (chỉ gắn nếu tồn tại)
+  const btnShowPred = document.getElementById('btnShowPred');
+  if (btnShowPred) {
+    btnShowPred.addEventListener('click', () => {
+      const tab = document.querySelector('.tab-predictions');
+      if (tab) tab.click();
+    });
+
+    btnShowPred.addEventListener('click', () => {
+      const section = document.getElementById('predictions-section');
+      if (section) section.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+
+
+  // Predictions tab controls
+  const btnRefreshPred = document.getElementById('btnRefreshPred');
+  if (btnRefreshPred) btnRefreshPred.addEventListener('click', loadPredictions);
+
+  const btnGetList = document.getElementById('btnGetList');
+  if (btnGetList) btnGetList.addEventListener('click', loadPredictions);
+
+  const btnDownloadPredCSV = document.getElementById('btnDownloadPredCSV');
+  if (btnDownloadPredCSV) btnDownloadPredCSV.addEventListener('click', () => { window.open(`${API_BASE}/churn_cus.csv`, '_blank'); });
+
+  // Download CSV
+  document.getElementById('btnDownloadCSV').addEventListener('click', () => {
+    window.open(`${API_BASE}/churn_cus.csv`, '_blank');
+  });
+
+  // Show preview
+
+  // ===== Predict =====
+  btnPredict.addEventListener("click", async () => {
+    const payload = getPayload();
+    const errs = validate(payload);
+    if (errs.length) {
+      pretty.innerHTML = `<span class="err">Input Error:</span> ${errs.join("; ")}`;
+      jsonBox.textContent = "";
+      return;
+    }
+    pretty.textContent = "Predicting…";
+    btnPredict.disabled = true;
+
+    try {
+      const m = modelSelect.value;
+      const url = m
+        ? `${API_BASE}/predict?model=${encodeURIComponent(m)}`
+        : `${API_BASE}/predict`;
+
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const text = await res.text();
+      jsonBox.textContent = text;
+
+      let data = {};
+      try { data = JSON.parse(text); } catch {}
+
+      if (data && typeof data === "object" && "probability" in data) {
+        const prob = Number(data.probability);
+        const bucket = (data.risk_bucket || "").toLowerCase();
+        const badge = riskBadge(bucket, prob);
+        const label = data.prediction ? "WILL CHURN (1)" : "WILL NOT CHURN (0)";
+
+        let confText = "";
+        if (data.confidence_level) {
+          const map = {
+            very_high: "very confident",
+            high: "quite confident",
+            medium: "uncertain",
+            low: "not confident"
+          };
+          const lvl = map[data.confidence_level] || data.confidence_level;
+          let scoreStr = "";
+          if (typeof data.confidence_score === "number") {
+            scoreStr = ` (${(data.confidence_score * 100).toFixed(1)}% confidence)`;
+          }
+          confText = ` • Confidence: <b>${lvl}</b>${scoreStr}`;
+        }
+
+        pretty.innerHTML =
+          `${badge} • Prediction: <b>${label}</b>${confText}` +
+          (data.loaded_from ? ` • <span class="muted">${data.loaded_from}</span>` : "");
+      } else if (data && data.error) {
+        pretty.innerHTML = `<span class="err">Error:</span> ${data.error}`;
+      } else {
+        pretty.innerHTML = `<span class="err">Could not parse JSON response.</span>`;
+      }
+    } catch (e) {
+      pretty.innerHTML = `<span class="err">Error:</span> ${e.message}`;
+      jsonBox.textContent = "";
+    } finally {
+      btnPredict.disabled = false;
+    }
+  });
+
+  btnClear.addEventListener("click", () => {
+    ["num_orders", "avg_order_value", "cancel_rate", "voucher_usage_rate", "avg_rating", "age", "inactive_days"]
+      .forEach(id => $(id).value = "");
+    pretty.textContent = "Data cleared.";
+    jsonBox.textContent = "";
+  });
+
+  // ===== Tabs =====
+  function showTab(ev, id) {
+    // Hide all tabs and deactivate all buttons
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+
+    // Activate the requested tab if present
+    const tabEl = document.getElementById(id);
+    if (tabEl) tabEl.classList.add("active");
+
+    // Safely activate the button: prefer event.currentTarget / event.target if available,
+    // otherwise try to find a matching .tab-btn that has an onclick referencing the id.
+    let btn = null;
+    try {
+      if (ev && ev.currentTarget) btn = ev.currentTarget;
+      else if (ev && ev.target) btn = ev.target.closest ? ev.target.closest('.tab-btn') : ev.target;
+    } catch (e) {
+      btn = null;
+    }
+
+    if (!btn) {
+      // Fallback: find button whose inline onclick contains the id string
+      btn = document.querySelector(`.tab-btn[onclick*="${id}"]`);
+    }
+
+    if (btn) btn.classList.add('active');
+  }
+
+  // ===== KMeans – churn rate bar chart =====
+  let kChart = null;
+  async function loadKMeans() {
+    try {
+      const res = await fetch(`${API_BASE}/kmeans_clusters`);
+      const j = await res.json();
+      if (j.error) {
+        alert("KMeans Error: " + j.error);
+        return;
+      }
+      const clusters = j.clusters || [];
+
+      // Table
+      const tbody = document.querySelector("#clusterSummaryTable tbody");
+      tbody.innerHTML = "";
+      clusters.forEach(c => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${c.cluster}</td>
+          <td>${(c.churn_rate * 100).toFixed(2)}%</td>
+          <td>${c.churn_count}</td>
+          <td>${c.total_customers}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Bar chart
+      const labels = clusters.map(c => `Cluster ${c.cluster}`);
+      const rates = clusters.map(c => c.churn_rate * 100);
+
+      if (kChart) kChart.destroy();
+      const ctx = document.getElementById("chartKMeans").getContext("2d");
+      kChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [{
+            label: "Churn Rate (%)",
+            data: rates,
+            backgroundColor: "#4fd1c5"
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: "Churn Rate (%)" },
+              ticks: { callback: v => v + "%" }
+            },
+            x: {
+              title: { display: true, text: "Cluster" }
+            }
+          }
+        }
+      });
+    } catch (e) {
+      alert("Error loading KMeans: " + e.message);
+    }
+  }
+
+  // ===== CLUSTER LIST (TAB 3) =====
+  let clusterRows = [];
+  let clusterColumns = [];
+
+  async function loadClusterList() {
+    try {
+      const res = await fetch(`${API_BASE}/kmeans_cluster_rows`);
+      const j = await res.json();
+      if (j.error) {
+        alert("Error loading list: " + j.error);
+        return;
+      }
+      clusterRows = j.rows || [];
+      clusterColumns = j.columns || [];
+
+      // render header
+      const thead = $("clusterListHead");
+      thead.innerHTML = "";
+      const trHead = document.createElement("tr");
+      clusterColumns.forEach(col => {
+        const th = document.createElement("th");
+        th.textContent = col;
+        trHead.appendChild(th);
+      });
+      thead.appendChild(trHead);
+
+      // fill dropdown cluster
+      const select = $("clusterFilter");
+      select.innerHTML = '<option value="">All</option>';
+      const ids = [...new Set(clusterRows.map(r => r.cluster))].sort((a, b) => a - b);
+      ids.forEach(cid => {
+        const opt = document.createElement("option");
+        opt.value = cid;
+        opt.textContent = "Cluster " + cid;
+        select.appendChild(opt);
+      });
+
+      renderClusterTable();
+    } catch (e) {
+      alert("Error loading list: " + e.message);
+    }
+  }
+
+  function renderClusterTable() {
+    const tbody = $("clusterListBody");
+    tbody.innerHTML = "";
+    if (!clusterRows.length) return;
+
+    const filter = $("clusterFilter").value;
+    const rows = clusterRows.filter(r => !filter || String(r.cluster) === filter);
+
+    rows.forEach(r => {
+      const tr = document.createElement("tr");
+      clusterColumns.forEach(col => {
+        const td = document.createElement("td");
+        let val = r[col];
+
+        if (col === "Churn_food") {
+          val = (val === 1 || val === "1" || val === true) ? "Churned" : "Active";
+        }
+        td.textContent = val;
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const filter = $("clusterFilter");
+    if (filter) {
+      filter.addEventListener("change", renderClusterTable);
+    }
+  });
+
+  // ===== WHAT-IF ANALYTICS =====
+  async function runWhatIf() {
+    const base = {
+      num_orders: num($("wh_num_orders").value),
+      avg_order_value: num($("wh_avg_order_value").value),
+      loyalty_tier: $("wh_loyalty_tier").value
+    };
+
+    const before = num($("wh_resp_before").value);
+    const after = num($("wh_resp_after").value);
+    const featureName = "support_response_time_hours";
+
+    const box = $("whatIfPretty");
+    const jsonBox = $("whatIfJson");
+    box.textContent = "Running simulation…";
+    jsonBox.textContent = "";
+
+    try {
+      const m = modelSelect.value;
+      const url = m
+        ? `${API_BASE}/what_if?model=${encodeURIComponent(m)}`
+        : `${API_BASE}/what_if`;
+
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          feature: featureName,
+          base: base,
+          value_before: before,
+          value_after: after
+        })
+      });
+
+      const text = await res.text();
+      jsonBox.textContent = text;
+
+      let data = {};
+      try { data = JSON.parse(text); } catch {}
+
+      if (data.error) {
+        box.innerHTML = `<span class="err">Error:</span> ${data.error}`;
+        return;
+      }
+
+      const pb = Number(data.prob_before);
+      const pa = Number(data.prob_after);
+      const delta = Number(data.delta);
+
+      const pctBefore = (pb * 100).toFixed(2) + "%";
+      const pctAfter = (pa * 100).toFixed(2) + "%";
+      const diff = (delta * 100).toFixed(2);
+
+      let trend;
+      if (delta < 0) trend = "📉 DECREASED";
+      else if (delta > 0) trend = "📈 INCREASED";
+      else trend = "➖ NO CHANGE";
+
+      const sign = delta >= 0 ? "+" : "";
+
+      box.innerHTML = `
+        ${trend}: churn probability changes from <b>${pctBefore}</b> to <b>${pctAfter}</b>
+        (difference ${sign}${diff} percentage points)
+        when reducing support response time from <b>${before}h</b> to <b>${after}h</b>.
+      `;
+    } catch (e) {
+      box.innerHTML = `<span class="err">Error:</span> ${e.message}`;
+    }
+  }
+
+  // ===== TOP N HIGH-RISK CUSTOMERS =====
+  async function loadTopRisk() {
+    try {
+      const n = Number($("topNInput").value) || 20;
+      const m = modelSelect.value;
+      const bucket = ($("riskBucketSelect")?.value || "high").toLowerCase();
+      let url = `${API_BASE}/top_risk_customers?top_n=${encodeURIComponent(n)}&bucket=${encodeURIComponent(bucket)}`;
+      if (m) url += `&model=${encodeURIComponent(m)}`;
+
+
+      const res = await fetch(url);
+      const j = await res.json();
+      if (j.error) {
+        alert("Error Top N: " + j.error);
+        return;
+      }
+
+      const cols = j.columns || [];
+      const rows = j.rows || [];
+
+      const thead = document.querySelector("#topRiskTable thead");
+      const tbody = document.querySelector("#topRiskTable tbody");
+      thead.innerHTML = "";
+      tbody.innerHTML = "";
+
+      // header
+      const trHead = document.createElement("tr");
+      cols.forEach(c => {
+        const th = document.createElement("th");
+        th.textContent = c;
+        trHead.appendChild(th);
+      });
+      thead.appendChild(trHead);
+
+      // body
+      rows.forEach(r => {
+        const tr = document.createElement("tr");
+        cols.forEach(c => {
+          const td = document.createElement("td");
+          let val = r[c];
+
+          if (c === "churn_proba" && typeof val === "number") {
+            val = (val * 100).toFixed(2) + "%";
+          }
+          if (c === "risk_bucket") {
+            if (val === "high") val = "High";
+            else if (val === "medium") val = "Medium";
+            else val = "Low";
+          }
+          if (c === "prediction") {
+            val = val ? "Will Churn" : "Will Stay";
+          }
+
+          td.textContent = val;
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+
+    } catch (e) {
+      alert("Error Top N: " + e.message);
+    }
+  }
+
+  // ===== RETENTION STRATEGY =====
+  async function runRetention() {
+    const payload = getPayload();
+    const errs = validate(payload);
+
+    const resultBox = $("retentionResult");
+    const jsonBoxRet = $("retentionJson");
+
+    if (errs.length) {
+      resultBox.innerHTML = `<span class="err">Input Error:</span> ${errs.join("; ")}`;
+      jsonBoxRet.textContent = "";
+      return;
+    }
+
+    resultBox.textContent = "Calculating retention strategy…";
+    jsonBoxRet.textContent = "";
+
+    try {
+      const m = modelSelect.value;
+      const url = m
+        ? `${API_BASE}/recommend_retention?model=${encodeURIComponent(m)}`
+        : `${API_BASE}/recommend_retention`;
+
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const text = await res.text();
+      jsonBoxRet.textContent = text;
+
+      let data = {};
+      try { data = JSON.parse(text); } catch {}
+
+      if (data.error) {
+        resultBox.innerHTML = `<span class="err">${data.error}</span>`;
+        return;
+      }
+
+      const prob = Number(
+        data.churn_probability ?? data.probability ?? 0
+      );
+      const actions = Array.isArray(data.actions)
+        ? data.actions
+        : [];
+
+      let html =
+        `<div class="muted">Churn Probability: <b>${(prob * 100).toFixed(2)}%</b></div>`;
+
+      if (!actions.length) {
+        html += `<p class="muted" style="margin-top:8px;">No specific recommendations available.</p>`;
+        resultBox.innerHTML = html;
+        return;
+      }
+
+      html += `<ul style="margin-top:10px;">`;
+      actions.forEach(a => {
+        const sp = typeof a.success_probability === "number"
+          ? ` – ${(a.success_probability * 100).toFixed(1)}% success rate`
+          : "";
+        html += `<li><b>${a.action}</b>${sp}</li>`;
+      });
+      html += `</ul>`;
+
+      resultBox.innerHTML = html;
+    } catch (e) {
+      resultBox.innerHTML = `<span class="err">Error:</span> ${e.message}`;
+      jsonBoxRet.textContent = "";
+    }
+  }
+
+  // ===== INIT =====
+  (async function init() {
+    // Bảo vệ trang technical nếu hàm có tồn tại trong admin_auth.js
+    if (typeof protectTechnicalPage === "function") {
+      protectTechnicalPage();
+    }
+    await refreshModels();
+    await refreshHealth();
+    await refreshPredModelFilter();
+  })();
+  document.getElementById("btnLogout").addEventListener("click", function () {
+    if (confirm("Do you want to log out??")) {
+        adminLogout(); // 🔥 dùng hàm có sẵn trong admin_auth.js
+    }
+});
+
+</script>
+
+</body>
+</html>

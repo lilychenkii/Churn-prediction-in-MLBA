@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<section class="slider">
+    <div class="slider-items">
+        <div class="slider-item">
+            <img src="~/asset/images/banner.png" alt=""> 
+        </div>
+    </div>
+</section>
+
+<section class="hot-products">
+    <div class="container">
+        <div class="row-grid">
+            <p class="heading-text">Hot products</p>
+        </div>
+        <div class="row-grid row-grid-hot-product">
+            @foreach (var item in Model)
+            {
+              <div class="hot-product-item" 
+                    data-code="@item.itemid"
+                    data-name="@item.name"
+                    data-price="@Convert.ToInt32(item.price)"
+                    data-image="@item.image_url">
+
+                <a href="/product?code=@item.itemid" class="hot-product-image">
+                <img src="@item.image_url" alt="@item.name">
+                </a>
+                <div class="hot-product-info">
+                    <h3 class="product-name">@item.name</h3>
+                    <p class="product-price">@item.price.ToString("N0") đ</p>
+                </div>
+                <div class="hot-product-actions">
+                    <button class="main-btn add-to-cart-btn" onclick="addProductToCart(this)">
+                    <i class="ri-shopping-cart-line"></i> Add to cart
+                    </button>
+                </div>
+              </div>
+            }
+        </div>
+    </div>
+</section>

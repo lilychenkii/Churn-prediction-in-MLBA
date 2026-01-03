@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/back_end/wwwroot/asset/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet"/>
+    <title>Sipsweet - Sign Up</title>
+</head>
+<body>
+    <!-- header -->
+    <header id="header">
+        <div class="container">
+            <div class="row-flex">
+                <div class="header-bar-icon">
+                    <i class="ri-menu-line"></i>
+                </div>
+                <div class="header-logo">
+                    <img src="/back_end/wwwroot/images/logo.png" alt="Sipsweet Logo"/>
+                </div>
+                <div class="header-nav">
+                    <nav>
+                        <ul>
+                            <li><a href="index.html">HOME</a></li>
+                            <li><a href="">MENU</a></li>
+
+                            <span id="auth-menu">
+                                <li><a href="login.html">LOGIN</a></li>
+                                <li><a href="signup.html">SIGN UP</a></li>
+                            </span>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="header-search">
+                    <input id="search-input" type="text" placeholder="Search">
+                    <i id="search-btn" class="ri-search-line"></i>
+                </div>
+                <div class="header-cart">
+                    <i class="ri-shopping-cart-line" number="0"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- signup section -->
+    <section class="signup p-to-top">
+  <div class="container">
+    <div class="signup-form">
+      <h1>Create Your Account</h1>
+      <form id="signupForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="username">Username <span style="color: var(--main-bg);">*</span></label>
+            <input type="text" id="username" name="username" required placeholder="Enter username">
+          </div>
+
+          <div class="form-group">
+            <label for="fullname">Full Name <span style="color: var(--main-bg);">*</span></label>
+            <input type="text" id="fullname" name="fullname" required placeholder="Enter full name">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email <span style="color: var(--main-bg);">*</span></label>
+            <input type="email" id="email" name="email" required placeholder="Enter email address">
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="Enter phone number">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="password">Password <span style="color: var(--main-bg);">*</span></label>
+            <input type="password" id="password" name="password" required minlength="6" placeholder="Minimum 6 characters">
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password <span style="color: var(--main-bg);">*</span></label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Re-enter password">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="dob">Date of Birth</label>
+            <input type="date" id="dob" name="dob">
+          </div>
+
+          <div class="form-group">
+            <label>Gender</label>
+            <div class="gender-options">
+              <label><input type="radio" name="gender" value="male"> Male</label>
+              <label><input type="radio" name="gender" value="female"> Female</label>
+              <label><input type="radio" name="gender" value="other"> Other</label>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="main-btn">Create Account</button>
+        <p>Already have an account? <a href="login.html">Login here</a></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+    
+    <!-- footer -->
+    <footer>
+        <div class="container">
+            <div class="row-grid">
+                <div class="footer-item">
+                    <p>SIPCLUB</p>
+                    <p>Sign up for membership</p>
+                    <p>Benefits and privileges</p>
+                </div>
+                <div class="footer-item">
+                    <p>POLICY</p>
+                    <p>Order cancellation policy</p>
+                    <p>Promotion policy</p>
+                    <p>Privacy policy</p>
+                    <p>Shipping policy</p>
+                </div>
+                <div class="footer-item">
+                    <p>CUSTOMER SERVICE</p>
+                    <p>FAQs</p>
+                </div>
+                <div class="footer-item">
+                    <p>ADDRESS</p>
+                    <p>Do Muoi, Linh Xuan, Thu Duc, Ho Chi Minh City</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Load scripts - all logic is in these JS files -->
+    <script src="/fod-del/asset/js/auth.js"></script>
+    <script src="/fod-del/asset/js/cart-manager.js"></script>
+    <script src="/back_end/wwwroot/asset/js/script.js"></script>
+</body>
+</html>

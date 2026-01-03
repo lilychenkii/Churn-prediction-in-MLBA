@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/back_end/wwwroot/asset/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet"/>
+    <title>Sipsweet - Checkout</title>
+    <style>
+        #bank-transfer-modal {/* Giới hạn chiều cao */
+    overflow-y: auto;     /* Thêm thanh cuộn dọc */
+    overflow-x: hidden;   /* Ẩn cuộn ngang */
+}
+    </style>
+</head>
+<body>
+    <!--------------------------header----------------------------->
+    <header id="header">
+        <div class="container">
+            <div class="row-flex">
+                <div class="header-bar-icon">
+                    <i class="ri-menu-line"></i>
+                </div>
+                <div class="header-logo">
+                    <img src="/back_end/wwwroot/images/Logo.png"/>
+                </div>
+                <div class="header-nav">
+                    <nav>
+                        <ul>
+                            <li><a href="index.html">HOME</a></li>
+                            <li class="menu-dropdown">
+                                <a href="menu.html">MENU <i class="ri-arrow-down-s-line"></i></a>
+                                <ul class="dropdown-content">
+                                    <li class="dropdown-category">
+                                        <a href="menu.html?category=drink">DRINK <i class="ri-arrow-right-s-line"></i></a>
+                                        <ul class="dropdown-subcategory">
+                                            <li><a href="menu.html?category=coffee">Coffee</a></li>
+                                            <li><a href="menu.html?category=tea-milktea">Tea & Milktea</a></li>
+                                            <li><a href="menu.html?category=frappuccino">Frappuccino</a></li>
+                                            <li><a href="menu.html?category=latte">Latte</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown-category">
+                                        <a href="menu.html?category=cake">CAKE <i class="ri-arrow-right-s-line"></i></a>
+                                        <ul class="dropdown-subcategory">
+                                            <li><a href="menu.html?category=cold-cake">Cold Cake</a></li>
+                                            <li><a href="menu.html?category=bread">Bread</a></li>
+                                            <li><a href="menu.html?category=cookies">Cookies</a></li>
+                                            <li><a href="menu.html?category=tart">Tart</a></li>
+                                            <li><a href="menu.html?category=sponge-cake">Sponge Cake</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li><a href="login.html">LOGIN</a></li>
+                            <li><a href="signup.html">SIGN UP</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="header-search">
+                    <input id="search-input" type="text" placeholder="Search">
+                    <i id="search-btn" class="ri-search-line"></i>
+                </div>
+                <div class="header-cart">
+                    <i class="ri-shopping-cart-line" number="0"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!--------------------------Checkout Page----------------------------->
+    <section class="checkout-page p-to-top">
+        <div class="container">
+            <div class="checkout-header">
+                <h1>Checkout</h1>
+                <div class="breadcrumb">
+                    <a href="index.html">Home</a>
+                    <i class="ri-arrow-right-line"></i>
+                    <span>Checkout</span>
+                </div>
+            </div>
+
+            <div class="checkout-content">
+                <!-- Left: Customer Information -->
+                <div class="checkout-left">
+                    <div class="checkout-section">
+                        <h2>Delivery Information</h2>
+                        <form id="checkoutForm" class="checkout-form">
+                            <div class="form-group">
+                                <label for="customerName">Full Name <span class="required">*</span></label>
+                                <input type="text" id="customerName" name="customerName" required 
+                                       placeholder="e.g., John Doe">
+                            </div>
+                            <div class="form-group">
+                                <label for="customerPhone">Phone Number <span class="required">*</span></label>
+                                <input type="tel" id="customerPhone" name="customerPhone" required 
+                                       placeholder="e.g., 0901234567" pattern="[0-9]{10}">
+                            </div>
+                            <div class="form-group">
+                                <label for="deliveryAddress">Full Delivery Address <span class="required">*</span></label>
+                                <textarea id="deliveryAddress" name="deliveryAddress" rows="3" required 
+                                          placeholder="e.g., 123 ABC Street, Linh Xuan Ward, Thu Duc District, Ho Chi Minh City"></textarea>
+                                <small style="color: #666;">Please enter complete address: House number, street, ward, district, city</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="customerNote">Delivery Notes (optional)</label>
+                                <textarea id="customerNote" name="customerNote" rows="2" 
+                                          placeholder="e.g., Call 15 minutes before, deliver to 2nd floor"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="saveAddress" name="saveAddress">
+                                    <span>Save this as default address</span>
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Right: Order Summary -->
+                <div class="checkout-right">
+                    <div class="checkout-section">
+                        <h2>Your Order</h2>
+                        <div class="order-summary">
+                            <table class="order-table">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="order-items">
+                                    <!-- Order items will be inserted here -->
+                                </tbody>
+                            </table>
+                            
+                            <div class="order-total-section">
+                                <div class="order-row">
+                                    <span>Subtotal:</span>
+                                    <span id="subtotal">0 đ</span>
+                                </div>
+                                <div class="order-row">
+                                    <span>Shipping Fee:</span>
+                                    <span id="shipping-fee">30,000 đ</span>
+                                </div>
+                                <div class="order-row discount-row" id="discount-row" style="display: none;">
+                                    <span>Discount:</span>
+                                    <span id="discount-amount">- 0 đ</span>
+                                </div>
+                                <div class="order-row total-row">
+                                    <strong>Total:</strong>
+                                    <strong id="total-price">0 đ</strong>
+                                </div>
+                            </div>
+                            
+                            <!-- Coupon Section -->
+                            <div class="coupon-section">
+                                <h3>Apply Coupon Code</h3>
+                                <div class="coupon-input-group">
+                                    <input type="text" id="coupon-code" placeholder="Enter coupon code">
+                                    <button type="button" onclick="applyCoupon()" class="coupon-apply-btn">Apply</button>
+                                </div>
+                                <div id="coupon-message"></div>
+                            </div>
+                            
+                            <!-- Delivery Driver Info Section -->
+                            <div class="driver-info-section" id="driver-info-section" style="display: none;">
+                                <h3>Your Delivery Driver</h3>
+                                <div class="driver-details">
+                                    <div class="driver-row">
+                                        <span class="driver-label">Name:</span>
+                                        <span id="driver-name" class="driver-value">-</span>
+                                    </div>
+                                    <div class="driver-row">
+                                        <span class="driver-label">Phone:</span>
+                                        <span id="driver-phone" class="driver-value">-</span>
+                                    </div>
+                                    <div class="driver-row">
+                                        <span class="driver-label">Vehicle:</span>
+                                        <span id="driver-vehicle" class="driver-value">-</span>
+                                    </div>
+                                    <div class="driver-row">
+                                        <span class="driver-label">Plate:</span>
+                                        <span id="driver-plate" class="driver-value">-</span>
+                                    </div>
+                                    <div class="driver-row">
+                                        <span class="driver-label">Rating:</span>
+                                        <span id="driver-rating" class="driver-value">⭐ -</span>
+                                    </div>
+                                    <div class="driver-row">
+                                        <span class="driver-label">Estimated Delivery:</span>
+                                        <span id="driver-delivery-time" class="driver-value">-</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Restaurant Info Section -->
+                            <div class="driver-info-section" id="restaurant-info-section" style="display: none;">
+                                <h3>🏪 Your Restaurant</h3>
+                                <div class="driver-details">
+                                    <div class="driver-row">
+                                        <span class="driver-label">Name:</span>
+                                        <span id="restaurant-name" class="driver-value">-</span>
+                                    </div>
+                                    <div class="driver-row">
+                                        <span class="driver-label">Cuisine:</span>
+                                        <span id="restaurant-cuisine" class="driver-value">-</span>
+                                    </div>
+                                    <div class="driver-row">
+                                        <span class="driver-label">Phone:</span>
+                                        <span id="restaurant-phone" class="driver-value">-</span>
+                                    </div>
+                                    <div class="driver-row">
+                                        <span class="driver-label">Address:</span>
+                                        <span id="restaurant-address" class="driver-value">-</span>
+                                    </div>
+                                    <div class="driver-row">
+                                        <span class="driver-label">Rating:</span>
+                                        <span id="restaurant-rating" class="driver-value">⭐ -</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="payment-method">
+                                <h3>Payment Method</h3>
+                                <label class="radio-label">
+                                    <input type="radio" name="payment" value="cod" checked>
+                                    <span>Cash on Delivery (COD)</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="payment" value="bank">
+                                    <span>Bank Transfer</span>
+                                </label>
+                            </div>
+
+                            <button type="button" id="place-order-btn" class="main-btn checkout-btn-submit">
+                            Place Order
+                            </button>
+                            <a href="index.html" class="continue-shopping-link">
+                                <i class="ri-arrow-left-line"></i> Continue Shopping
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--------------------------------footer--------------------->
+    <footer>
+        <div class="container">
+            <div class="row-grid">
+                <div class="footer-item">
+                    <p>SIPCLUB</p>
+                    <p>Sign up for membership</p>
+                    <p>Benefits and privileges</p>
+                </div>
+                <div class="footer-item">
+                    <p>POLICY</p>
+                    <p>Order cancellation policy</p>
+                    <p>Promotion policy</p>
+                    <p>Privacy policy</p>
+                    <p>Shipping policy</p>
+                </div>
+                <div class="footer-item">
+                    <p>CUSTOMER SERVICE</p>
+                    <p>FAQs</p>
+                </div>
+                <div class="footer-item">
+                    <p>ADDRESS</p>
+                    <p>Do Muoi, Linh Xuan, Thu Duc, Thanh Pho Ho Chi Minh</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Bank Transfer Modal -->
+    <div id="bank-transfer-modal" class="bank-modal">
+        <div class="bank-modal-content">
+            <h2 class="bank-modal-title">Bank Transfer Information</h2>
+            
+            <!-- QR Code Section -->
+            <div class="bank-qr-section">
+                <img src="/back_end/wwwroot/images/checkout/QRCodef.jpg" alt="QR Code" class="bank-qr-image">
+                <p class="bank-qr-text">Scan QR code to transfer</p>
+            </div>
+            
+            <div class="bank-info-box">
+                <div class="bank-info-row">
+                    <span class="bank-label">Bank:</span>
+                    <span class="bank-value">Tien Phong Bank</span>
+                </div>
+                <div class="bank-info-row">
+                    <span class="bank-label">Account Number:</span>
+                    <span class="bank-value bank-account">1234567890</span>
+                </div>
+                <div class="bank-info-row">
+                    <span class="bank-label">Account Name:</span>
+                    <span class="bank-value">SIPSWEET</span>
+                </div>
+                <hr class="bank-divider">
+                <div class="bank-info-row">
+                    <span class="bank-label">Amount:</span>
+                    <span id="transfer-amount" class="bank-amount">0 đ</span>
+                </div>
+                <div class="bank-info-row">
+                    <span class="bank-label">Transfer Note:</span>
+                    <span id="transfer-note" class="bank-note">SIPSWEET XXX</span>
+                </div>
+            </div>
+            
+            <div class="bank-warning-box">
+                <p class="bank-warning-title"><strong>Important:</strong></p>
+                <ul class="bank-warning-list">
+                    <li>Transfer with exact note to confirm order</li>
+                    <li>Order will be processed after payment received</li>
+                    <li>Complete transfer within 24 hours to hold your order</li>
+                    <li>Order ID: <span id="modal-order-id" class="bank-order-id">#XXX</span></li>
+                </ul>
+            </div>
+            
+            <button onclick="closeBankModal()" class="bank-confirm-btn">Got It</button>
+        </div>
+    </div>
+    
+    <script src="/fod-del/asset/js/auth.js"></script>
+    <script src="/fod-del/asset/js/cart-manager.js"></script>
+    <script src="/fod-del/asset/js/checkout.js"></script>
+    <script src="/back_end/wwwroot/asset/js/script.js"></script>
+</body>
+</html>
+

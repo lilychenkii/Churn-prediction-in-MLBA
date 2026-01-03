@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/back_end/wwwroot/asset/css/style.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .admin-panel { padding: 20px; background: white; box-shadow: 0 0 15px rgba(0,0,0,0.1); border-radius: 8px; margin-top: 40px;}
+        .admin-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #dee2e6; padding-bottom: 15px; margin-bottom: 20px; }
+        .details-view { max-width: 700px; margin: 30px auto;}
+        .details-view dt { font-weight: bold; margin-top: 15px;}
+        .details-view dd { margin-left: 0; }
+        .details-view img { max-width: 200px; border-radius: var(--main-border-radius); margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="admin-panel">
+            <div class="admin-header">
+                <h1>Product Details</h1>
+                <a href="admin_list.html" class="main-btn"><i class="ri-arrow-left-line"></i> Back to List</a>
+            </div>
+            <div id="details-content" class="details-view"></div>
+        </div>
+    </div>
+    
+    <script src="/fod-del/asset/js/admin_script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            const productId = getUrlParameter('id');
+            const product = await getProductById(productId);
+
+            if (product) {
+                // Phân biệt base64 image và file path
+                let imageUrl = '';
+                if (product.image_url && product.image_url.startsWith('data:image')) {
+                    // Base64 image - dùng trực tiếp
+                    imageUrl = product.image_url;
+                } else if (product.image_url) {
+                    // File path - thêm prefix
+                    imageUrl = `/back_end/wwwroot/${product.image_url}`;
+                }
+                
+                const content = `
+                    <dl>
+                        <dt>Product ID</dt><dd>${product.itemid}</dd>
+                        <dt>Product Name</dt><dd>${product.name}</dd>
+                        <dt>Price</dt><dd>${product.price.toLocaleString('vi-VN')} đ</dd>
+                        <dt>Description</dt><dd>${product.descriptionname || 'N/A'}</dd>
+                        <dt>Restaurant ID</dt><dd>${product.restaurantid || 'N/A'}</dd>
+                        <dt>Category ID</dt><dd>${product.categoryid || 'N/A'}</dd>
+                        <dt>Available</dt><dd>${product.available ? 'Yes' : 'No'}</dd>
+                        <dt>Rating</dt><dd>${product.rating_avg || 0} (${product.rating_count || 0} reviews)</dd>
+                        <dt>Image</dt><dd>${imageUrl ? `<img src="${imageUrl}">` : 'No image'}</dd>
+                    </dl>
+                `;
+                document.getElementById('details-content').innerHTML = content;
+            } else {
+                document.getElementById('details-content').innerHTML = '<p>Product not found.</p>';
+            }
+        });
+    </script>
+</body>
+</html>

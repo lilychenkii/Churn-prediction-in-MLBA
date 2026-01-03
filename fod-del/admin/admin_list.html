@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/back_end/wwwroot/asset/css/style.css">
+    <style>
+        body 
+        { 
+            background-color: #f8f9fa; 
+        }
+        header {
+    height: var(--header-height);
+    padding: 0 28px;
+
+    display: flex;
+    align-items: center;
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    box-shadow: 0 2px 12px rgba(236, 72, 153, 0.08);
+}
+.header-logo {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-logo img {
+            height: 48px;
+            width: 48px;
+            border-radius: 12px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
+            color: #be185d;
+        }
+
+        .admin-panel 
+        {   padding: 20px; 
+            background: white; 
+            box-shadow: 0 0 15px rgba(0,0,0,0.1); border-radius: 8px; margin-top: 40px;}
+        .admin-header 
+        { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 1px solid #dee2e6; 
+            padding-bottom: 15px; 
+            margin-bottom: 20px; 
+        }
+        .admin-header h1 
+        { 
+            font-size: 24px; 
+            color: #333; 
+        }
+        
+        .admin-page 
+        { 
+            display: none; 
+        }
+        .admin-page.active 
+        { 
+            display: block; 
+        }
+        
+        .admin-table 
+        { 
+            width: 100%; 
+            border-collapse: collapse; 
+        }
+        .admin-table th, .admin-table td 
+        { 
+            border: 1px solid #dee2e6; 
+            padding: 12px; 
+            text-align: left; 
+            vertical-align: middle; }
+        .admin-table th 
+        { 
+            background-color: #f2f2f2; 
+        }
+        .product-image 
+        { 
+            width: 60px; 
+            height: 60px; 
+            object-fit: cover; 
+            border-radius: var(--main-border-radius); 
+        }
+        
+        /* === PHẦN CHỈNH SỬA NÚT BẤM === */
+        .action-buttons {
+            display: flex; /* Đảm bảo các nút luôn trên 1 hàng */
+            gap: 8px; /* Tạo khoảng cách nhỏ giữa các nút */
+        }
+        .action-buttons .main-btn {
+            display: inline-flex; align-items: center; gap: 5px;
+            margin: 0; /* Xóa margin cũ */
+            font-size: 14px; padding: 6px 12px;
+        }
+        /* Nút Edit sẽ dùng màu gốc từ .main-btn (#E195AB) */
+        .btn-edit 
+        { 
+            background-color: #E195AB; 
+            border-color: #ECABC1;
+        }
+        /* Nút Details: Màu hồng nhạt hơn */
+        .btn-details { 
+            background-color: #E195AB; 
+            border-color: #ECABC1; 
+        }
+
+        /* Nút Delete: Màu hồng nhạt nhất */
+        .btn-delete { 
+            background-color: #E195AB; 
+            border-color: #F2BCCB; 
+        }
+    </style>
+</head>
+<body>
+    <header>
+  <div class="header-logo">
+    <img src="/fod-del/models/static/Logo.png"/>
+    &nbsp;&nbsp;&nbsp;
+    <h1>Food Delivery - Admin Page</h1>
+  </div>
+  <div style="position:absolute;right:20px;top:22px;">
+    <button id="btnLogout"
+            style="padding:8px 16px;border-radius:10px;border:2px solid #ec4899;
+                   background:white;color:#ec4899;font-weight:600;cursor:pointer;">
+      Logout
+    </button>
+  </div>
+</header>
+    <div class="container">
+        <div class="admin-panel">
+            <div class="admin-header">
+                <h1>Product Management</h1>
+                <a href="admin_create.html" class="main-btn"><i class="ri-add-line"></i> Add New Product</a>
+            </div>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Image</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="product-list-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="/fod-del/asset/js/admin_script.js"></script>
+    <script>
+        if (typeof protectAdminPage === "function") {
+      protectAdminPage();
+    }
+        async function renderProductList() {
+            const products = await getProducts();
+            const tbody = document.getElementById('product-list-body');
+            tbody.innerHTML = '';
+            
+            if (!products || !Array.isArray(products)) {
+                console.error('Products is not an array:', products);
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Error loading products</td></tr>';
+                return;
+            }
+
+            if (products.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No products found</td></tr>';
+                return;
+            }
+            
+            products.forEach((product, index) => {
+                const row = document.createElement('tr');
+                
+                // Phân biệt base64 image và file path
+                let imageSrc;
+                if (product.image_url && product.image_url.startsWith('data:image')) {
+                    // Base64 image - dùng trực tiếp
+                    imageSrc = product.image_url;
+                } else if (product.image_url) {
+                    // File path - thêm prefix
+                    imageSrc = '/back_end/wwwroot/' + product.image_url;
+                } else {
+                    // Default image
+                    imageSrc = '/back_end/wwwroot/images/default.jpg';
+                }
+                
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td><img src="${imageSrc}" alt="${product.name}" class="product-image"></td>
+                    <td>${product.name}</td>
+                    <td>${product.price.toLocaleString('vi-VN')} đ</td>
+                    <td class="action-buttons">
+                        <a href="admin_edit.html?id=${product.itemid}" class="main-btn btn-edit"><i class="ri-pencil-line"></i>Edit</a>
+                        <a href="admin_details.html?id=${product.itemid}" class="main-btn btn-details"><i class="ri-eye-line"></i>Details</a>
+                        <a href="admin_delete.html?id=${product.itemid}" class="main-btn btn-delete"><i class="ri-delete-bin-line"></i>Delete</a>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', renderProductList);
+        document.getElementById("btnLogout").addEventListener("click", function () {
+    if (confirm("Do you want to log out?")) {
+        adminLogout();  // 🔥 GỌI HÀM LOGOUT
+    }
+});
+
+    </script>
+    <script src="/fod-del/asset/js/admin_auth.js"></script>
+</body>
+</html>

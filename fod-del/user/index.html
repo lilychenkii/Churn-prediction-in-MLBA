@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/back_end/wwwroot/asset/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet"/>
+    <title>Sipsweet</title>
+</head>
+<body>
+    <!--------------------------header----------------------------->
+    <header id="header">
+        <div class="container">
+            <div class="row-flex">
+                <div class="header-bar-icon">
+                    <i class="ri-menu-line"></i>
+                </div>
+                <div class="header-logo">
+                    <img src="/back_end/wwwroot/images/Logo.png"/>
+                </div>
+                <div class="header-nav">
+                    <nav>
+                        <ul>
+                            <li><a href="index.html">HOME</a></li>
+                            <li class="menu-dropdown">
+                                <a href="menu.html">MENU <i class="ri-arrow-down-s-line"></i></a>
+                                <ul class="dropdown-content">
+                                    <li class="dropdown-category">
+                                        <a href="menu.html?category=drink">DRINK <i class="ri-arrow-right-s-line"></i></a>
+                                        <ul class="dropdown-subcategory">
+                                            <li><a href="menu.html?category=coffee">Coffee</a></li>
+                                            <li><a href="menu.html?category=tea-milktea">Tea & Milktea</a></li>
+                                            <li><a href="menu.html?category=frappuccino">Frappuccino</a></li>
+                                            <li><a href="menu.html?category=latte">Latte</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown-category">
+                                        <a href="menu.html?category=cake">CAKE <i class="ri-arrow-right-s-line"></i></a>
+                                        <ul class="dropdown-subcategory">
+                                            <li><a href="menu.html?category=cold-cake">Cold Cake</a></li>
+                                            <li><a href="menu.html?category=bread">Bread</a></li>
+                                            <li><a href="menu.html?category=cookies">Cookies</a></li>
+                                            <li><a href="menu.html?category=tart">Tart</a></li>
+                                            <li><a href="menu.html?category=sponge-cake">Sponge Cake</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+   
+
+                            <!-- Auth menu items will be dynamically loaded here -->
+                            <span id="auth-menu">
+                                <li><a href="login.html">LOGIN</a></li>
+                                <li><a href="signup.html">SIGN UP</a></li>
+                            </span>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="header-search">
+                    <input id="search-input" type="text" placeholder="Search">
+                    <i id="search-btn" class="ri-search-line"></i>
+                </div>
+                <div class="header-cart">
+                    <i class="ri-shopping-cart-line" number="0"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!---------------------------------slider-------------------------->
+    <section class="slider">
+        <div class="slider-items">
+            <div class="slider-item">
+                <img src="/back_end/wwwroot/images/banner.png" alt="">
+            </div>
+        </div>
+    </section>
+    <!-----------------------------hotproduct---------------------->
+    <section class="hot-products">
+        <div class="container">
+            <div class="row-grid">
+                <p class="heading-text">Hot products</p>
+            </div>
+            <div class="row-grid row-grid-hot-product" id="hot-products-container">
+                <!-- Hot products will be loaded from API -->
+                <p style="text-align: center; width: 100%; padding: 40px; color: #999;">Loading products...</p>
+            </div>
+        </div>
+    </section>
+    <!--------------------------------Shopping Cart Modal--------------------->
+    <div class="cart-overlay">
+        <div class="cart-modal">
+            <div class="cart-header">
+                <h2>Shopping Cart</h2>
+                <i class="ri-close-line cart-close"></i>
+            </div>
+            <div class="cart-content">
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Product ID</th>
+                            <th>Image</th>
+                            <th>Product Name</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total Price</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cart-items">
+                        <!-- Cart items will be inserted here dynamically -->
+                    </tbody>
+                </table>
+                <div class="cart-empty" style="display: none;">
+                    <p>Your cart is empty</p>
+                </div>
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <h3>Total: <span id="cart-total-price">0 đ</span></h3>
+                </div>
+                <div class="cart-actions">
+                    <button class="main-btn" onclick="continueShopping()">Continue Shopping</button>
+                    <button class="main-btn checkout-btn" onclick="checkout()">Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Hidden placeholders to avoid JS error from cart-manager.js on index page -->
+<div id="product-detail-section" style="display:none;"></div>
+
+<div id="product-detail-container" style="display:none;"></div>
+
+<div id="related-products-container" style="display:none;"></div>
+
+<span id="product-breadcrumb" style="display:none;"></span>
+
+    <!--------------------------------footer--------------------->
+    <footer>
+        <div class="container">
+            <div class="row-grid">
+                <div class="footer-item">
+                    <p>SIPCLUB</p>
+                    <p>Sign up for membership</p>
+                    <p>Benefits and privileges</p>
+                </div>
+                <div class="footer-item">
+                    <p>POLICY</p>
+                    <p>Order cancellation policy</p>
+                    <p>Promotion policy</p>
+                    <p>Privacy policy</p>
+                    <p>Shipping policy</p>
+                </div>
+                <div class="footer-item">
+                    <p>CUSTOMER SERVICE</p>
+                    <p>FAQs</p>
+                </div>
+                <div class="footer-item">
+                    <p>ADDRESS</p>
+                    <p>Do Muoi, Linh Xuan, Thu Duc, Ho Chi Minh City</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+<script src="/fod-del/asset/js/auth.js"></script>
+<script src="/fod-del/asset/js/cart-manager.js"></script> 
+<script src="/fod-del/asset/js/api-products.js"></script>
+<script src="/back_end/wwwroot/asset/js/script.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async function () {
+    const hotContainer = document.getElementById('hot-products-container');
+    if (!hotContainer || typeof fetchProductsFromAPI !== 'function') {
+        console.warn('Không tìm thấy hot-products-container hoặc fetchProductsFromAPI');
+        return;
+    }
+
+    try {
+        const allProducts = await fetchProductsFromAPI();  // từ api-products.js
+        // Chọn tạm 8 sản phẩm đầu làm hot
+        const hotProducts = allProducts.slice(0, 8);
+
+        hotContainer.innerHTML = '';
+
+        hotProducts.forEach(product => {
+            const div = document.createElement('div');
+            div.className = 'hot-product-item';
+            // data-* để addProductToCart đọc
+            div.dataset.id = product.id;
+            div.dataset.code = product.code;
+            div.dataset.name = product.name;
+            div.dataset.price = product.price;
+            div.dataset.image = product.image;
+
+            div.innerHTML = `
+                <a href="product-detail.html?id=${product.id}">
+                    <img src="${product.image}" alt="${product.name}">
+                </a>
+                <p>
+                    <a href="product-detail.html?id=${product.id}">
+                        ${product.name}
+                    </a>
+                </p>
+                <div class="product-item-price">
+                    <p>${product.price.toLocaleString('vi-VN')} <sup>đ</sup></p>
+                </div>
+                <button class="main-btn add-to-cart-btn" onclick="addProductToCart(this)">
+                    Add to cart
+                </button>
+            `;
+
+            hotContainer.appendChild(div);
+        });
+    } catch (err) {
+        console.error('Lỗi load hot products:', err);
+        hotContainer.innerHTML = '<p style="text-align:center; width:100%; padding:40px; color:#f44336;">Không thể tải sản phẩm</p>';
+    }
+});
+</script>
+
+</body>
+</html>

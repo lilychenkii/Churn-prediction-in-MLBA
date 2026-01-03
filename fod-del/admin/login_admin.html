@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="/back_end/wwwroot/asset/css/style.css">
+    
+    <style>
+        :root {
+            --main-bg: #E195AB;
+            --main-font: 'Open Sans', sans-serif;
+            --main-border-radius: 8px;
+            --header-height: 72px;
+            --border: #f1c4d3;
+        }
+
+        /* RESET CƠ BẢN */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--main-font);
+            background: linear-gradient(135deg, #fff5f7, #fde6ee);
+            color: #111827;
+        }
+
+        header {
+    height: var(--header-height);
+    padding: 0 28px;
+
+    display: flex;
+    align-items: center;
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    box-shadow: 0 2px 12px rgba(236, 72, 153, 0.08);
+}
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-logo img {
+            height: 48px;
+            width: 48px;
+            border-radius: 12px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
+            color: #be185d;
+        }
+
+        /* KHU VỰC LOGIN CĂN GIỮA MÀN HÌNH (TRỪ PHẦN HEADER) */
+        .login-section {
+            min-height: calc(100vh - var(--header-height));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 16px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .login-box {
+            background: #ffffff;
+            padding: 32px 28px;
+            border-radius: var(--main-border-radius);
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+            text-align: center;
+            border: 1px solid rgba(248, 113, 113, 0.08);
+        }
+
+        .login-box h2 {
+            margin-bottom: 8px;
+            color: #111827;
+            font-weight: 700;
+            font-size: 22px;
+            letter-spacing: 0.03em;
+        }
+
+        .login-subtitle {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: var(--main-border-radius);
+            font-size: 14px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            background-color: #f9fafb;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--main-bg);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(225, 149, 171, 0.25);
+        }
+
+        .form-group input::placeholder {
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        /* NÚT LOGIN */
+        #adminLoginForm .main-btn {
+            width: 100%;
+            padding: 11px 12px;
+            font-size: 15px;
+            margin-top: 8px;
+
+            background-color: #ffffff;
+            color: var(--main-bg);
+            border-radius: var(--main-border-radius);
+            border: 2px solid var(--main-bg);
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 0.03em;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+
+            transition: transform 0.15s ease, box-shadow 0.15s ease,
+                        background-color 0.2s ease, color 0.2s ease;
+        }
+
+        #adminLoginForm .main-btn:hover:not(:disabled) {
+            background-color: var(--main-bg);
+            color: #ffffff;
+            box-shadow: 0 10px 20px rgba(225, 149, 171, 0.35);
+            transform: translateY(-1px);
+        }
+
+        #adminLoginForm .main-btn:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 4px 12px rgba(225, 149, 171, 0.25);
+        }
+
+        #adminLoginForm .main-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* RESPONSIVE MOBILE */
+        @media (max-width: 480px) {
+            header {
+                padding-inline: 16px;
+            }
+
+            h1 {
+                font-size: 18px;
+            }
+
+            .login-box {
+                padding: 24px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+  <div class="header-logo">
+    <!-- Nên dùng / thay vì \ -->
+    <img src="/back_end/wwwroot/images/Logo.png" alt="Logo" />
+    <h1>Food Delivery - Customer Churn Prediction</h1>
+  </div>
+</header>
+
+<section class="login-section">
+    <div class="container">
+        <div class="login-box">
+            <h2>ADMINISTRATION LOGIN</h2>
+            <p class="login-subtitle">Sign in to manage customers, churn reports &amp; models.</p>
+
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        required
+                        autocomplete="username"
+                        placeholder="Enter your admin username"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        required
+                        autocomplete="current-password"
+                        placeholder="Enter your password"
+                    >
+                </div>
+
+                <button type="submit" class="main-btn">Login</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script src="/fod-del/asset/js/admin_auth.js"></script>
+<script src="/fod-del/asset/js/login_check.js"></script>
+<script>
+document.getElementById('adminLoginForm').addEventListener('submit', async function (event) {
+  event.preventDefault();
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+
+  const btn = event.target.querySelector('button[type="submit"]');
+  const old = btn.textContent;
+  btn.textContent = 'Đang đăng nhập...';
+  btn.disabled = true;
+
+  const result = await jsonAdminLogin(username, password);
+
+  btn.textContent = old;
+  btn.disabled = false;
+
+  if (result.success) {
+    const role = (result.user.role || "").toLowerCase();
+    if (role === "admin") {
+      window.location.href = "/fod-del/admin/admin_list.html";
+    } else if (role === "technical") {
+      window.location.href = "http://127.0.0.1:5000/";
+    } else {
+      alert("Role không hợp lệ (admin/technical)");
+    }
+  } else {
+    alert(result.message);
+  }
+});
+</script>
+
+</body>
+</html>

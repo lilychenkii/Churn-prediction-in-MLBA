@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/back_end/wwwroot/asset/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet"/>
+    <title>Sipsweet-Product</title>
+</head>
+<body>
+    <!--------------------------header----------------------------->
+    <header id="header">
+        <div class="container">
+            <div class="row-flex">
+                <div class="header-bar-icon">
+                    <i class="ri-menu-line"></i>
+                </div>
+                <div class="header-logo">
+                    <img src="/back_end/wwwroot/images/logo.png"/>
+                </div>
+                <div class="header-nav">
+                    <nav>
+                        <ul>
+                            <li><a href="index.html">HOME</a></li>
+                            <li class="menu-dropdown">
+                                <a href="menu.html">MENU <i class="ri-arrow-down-s-line"></i></a>
+                                <ul class="dropdown-content">
+                                    <li class="dropdown-category">
+                                        <a href="menu.html?category=drink">DRINK <i class="ri-arrow-right-s-line"></i></a>
+                                        <ul class="dropdown-subcategory">
+                                            <li><a href="menu.html?category=coffee">Coffee</a></li>
+                                            <li><a href="menu.html?category=tea-milktea">Tea & Milktea</a></li>
+                                            <li><a href="menu.html?category=frappuccino">Frappuccino</a></li>
+                                            <li><a href="menu.html?category=latte">Latte</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown-category">
+                                        <a href="menu.html?category=cake">CAKE <i class="ri-arrow-right-s-line"></i></a>
+                                        <ul class="dropdown-subcategory">
+                                            <li><a href="menu.html?category=cold-cake">Cold Cake</a></li>
+                                            <li><a href="menu.html?category=bread">Bread</a></li>
+                                            <li><a href="menu.html?category=cookies">Cookies</a></li>
+                                            <li><a href="menu.html?category=tart">Tart</a></li>
+                                            <li><a href="menu.html?category=sponge-cake">Sponge Cake</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li><a href="login.html">LOGIN</a></li>
+                            <li><a href="signup.html">SIGN UP</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="header-search">
+                    <input id="search-input" type="text" placeholder="Search">
+                    <i id="search-btn" class="ri-search-line"></i>
+                </div>
+                <div class="header-cart">
+                    <i class="ri-shopping-cart-line" number="0"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-----------------------------product detail---------------------->
+    <section class="product-detail p-to-top" data-code="SP001" data-name="Vietnamese Iced Milk Coffee" data-price="35000" data-image="asset/images/Vietnamese Iced Milk Coffee.jpg">
+        <div class="container">
+            <div class="row-flex row-flex-product-detail">
+                <p>Product</p><i class="ri-arrow-right-line"></i><p>Vietnamese Iced Milk Coffee</p>
+            </div>
+            <div class="row-grid">
+                <div class="product-detail-left">
+                    <img src="/back_end/wwwroot/images/coffee/Vietnamese Iced Milk Coffee.jpg" alt="">
+                </div>
+                <div class="product-detail-right">
+                    <div class="product-detail-right-infor">
+                        <h1>Vietnamese Iced Milk Coffee</h1>
+                        <div class="product-item-price">
+                            <p>35.000 <sup>đ</sup></p>
+                        </div>
+                    </div>
+                    <div class="product-detail-right-des">
+                        <h2>Description</h2>
+                        <ul>
+                            <li>Strong robusta coffee with condensed milk, served over ice.</li>
+                        </ul>
+                    </div>
+                    <div class="product-detail-right-quantity">
+                        <h2>Quantity:</h2>
+                        <div class="product-detail-right-quantity-input">
+                            <i class="ri-subtract-line"></i>
+                            <input onkeydown="return false" class="quantity-input" type="number" value="1">
+                            <i class="ri-add-line"></i>
+                        </div>
+                    </div>
+                    <div class="product-detail-right-addtocart">
+                        <button class="main-btn" onclick="addProductDetailToCart()">Add to cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-----------------------------hotproduct---------------------->
+    <section class="hot-products">
+        <div class="container">
+            <div class="row-grid">
+                <p class="heading-text">Hot products</p>
+            </div>
+            <div class="row-grid row-grid-hot-product">
+                <div class="hot-product-item" data-code="SP001" data-name="Vietnamese Iced Milk Coffee" data-price="35000" data-image="asset/images/Vietnamese Iced Milk Coffee.jpg">
+                    <a href=""><img src="/back_end/wwwroot/images/coffee/Vietnamese Iced Milk Coffee.jpg" alt=""></a>
+                    <p><a href="">Vietnamese Iced Milk Coffee</a></p>
+                    <div class="hot-product-item-price">
+                        <p>35.000 <sup>đ</sup></p>
+                    </div>
+                    <button class="main-btn add-to-cart-btn" onclick="addProductToCart(this)">Thêm vào giỏ</button>
+                </div>
+                <div class="hot-product-item" data-code="SP002" data-name="Matcha Latte" data-price="60000" data-image="asset/images/matcha latte.jpg">
+                    <a href=""><img src="/back_end/wwwroot/images/latte/matcha latte.jpg" alt=""></a>
+                    <p><a href="">Matcha Latte</a></p>
+                    <div class="hot-product-item-price">
+                        <p>60.000 <sup>đ</sup></p>
+                    </div>
+                    <button class="main-btn add-to-cart-btn" onclick="addProductToCart(this)">Thêm vào giỏ</button>
+                </div>
+                <div class="hot-product-item" data-code="SP003" data-name="Cheese stick" data-price="60000" data-image="asset/images/Cheese_stick.jpg">
+                    <a href=""><img src="/back_end/wwwroot/images/cookies/Cheese_stick.jpg" alt=""></a>
+                    <p><a href="">Cheese stick</a></p>
+                    <div class="hot-product-item-price">
+                        <p>60.000 <sup>đ</sup></p>
+                    </div>
+                    <button class="main-btn add-to-cart-btn" onclick="addProductToCart(this)">Thêm vào giỏ</button>
+                </div>
+                <div class="hot-product-item" data-code="SP004" data-name="Cookies & Cream Frappuccino" data-price="65000" data-image="asset/images/cookies n cream frappe.jpg">
+                    <a href=""><img src="/back_end/wwwroot/images/frappuccino/cookies n cream frappe.jpg" alt=""></a>
+                    <p><a href="">Cookies & Cream Frappuccino</a></p>
+                    <div class="hot-product-item-price">
+                        <p>65.000 <sup>đ</sup></p>
+                    </div>
+                    <button class="main-btn add-to-cart-btn" onclick="addProductToCart(this)">Thêm vào giỏ</button>
+                </div>
+                <div class="hot-product-item" data-code="SP005" data-name="Mini Maccarone" data-price="80000" data-image="asset/images/mini_maccarone.jpg">
+                    <a href=""><img src="/back_end/wwwroot/images/cookies/mini_maccarone.jpg" alt=""></a>
+                    <p><a href="">Mini Maccarone</a></p>
+                    <div class="hot-product-item-price">
+                        <p>80.000 <sup>đ</sup></p>
+                    </div>
+                    <button class="main-btn add-to-cart-btn" onclick="addProductToCart(this)">Thêm vào giỏ</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--------------------------------Shopping Cart Modal--------------------->
+    <div class="cart-overlay">
+        <div class="cart-modal">
+            <div class="cart-header">
+                <h2>Giỏ Hàng</h2>
+                <i class="ri-close-line cart-close"></i>
+            </div>
+            <div class="cart-content">
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Mã SP</th>
+                            <th>Ảnh</th>
+                            <th>Tên Sản Phẩm</th>
+                            <th>Đơn Giá</th>
+                            <th>Số Lượng</th>
+                            <th>Thành Tiền</th>
+                            <th>Xóa</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cart-items">
+                        <!-- Cart items will be inserted here dynamically -->
+                    </tbody>
+                </table>
+                <div class="cart-empty" style="display: none;">
+                    <p>Giỏ hàng trống</p>
+                </div>
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <h3>Tổng cộng: <span id="cart-total-price">0 đ</span></h3>
+                </div>
+                <div class="cart-actions">
+                    <button class="main-btn" onclick="continueShopping()">Tiếp tục mua hàng</button>
+                    <button class="main-btn checkout-btn" onclick="checkout()">Thanh toán</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--------------------------------footer----------------------->
+    <footer>
+        <div class="container">
+            <div class="row-grid">
+                <div class="footer-item">
+                    <p>SIPCLUB</p>
+                    <p>Sign up for membership</p>
+                    <p>Benefits and privileges</p>
+                </div>
+                <div class="footer-item">
+                    <p>POLICY</p>
+                    <p>Order cancellation policy</p>
+                    <p>Promotion policy</p>
+                    <p>Privacy policy</p>
+                    <p>Shipping policy</p>
+                </div>
+                <div class="footer-item">
+                    <p>CUSTOMER SERVICE</p>
+                    <p>FAQs</p>
+                </div>
+                <div class="footer-item">
+                    <p>ADDRESS</p>
+                    <p>Đỗ Mười, Linh Xuân, Thủ Đức, Thành phố Hồ Chí Minh</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/back_end/wwwroot/asset/js/script.js"></script>
+
+</body>
+</html>

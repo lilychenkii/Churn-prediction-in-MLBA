@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Order API</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/back_end/wwwroot/asset/css/style.css">
+    <style>
+        body { 
+            background-color: #f8f9fa; 
+            padding: 20px;
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+        .test-section h3 {
+            color: #E195AB;
+            margin-bottom: 15px;
+        }
+        button {
+            background-color: #E195AB;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #d17a95;
+        }
+        .result {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .form-row input {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Test Order API</h1>
+        <p>Backend API: <strong id="api-url">http://localhost:5200/api/Order</strong></p>
+        
+        <!-- Test 1: Create Order -->
+        <div class="test-section">
+            <h3><i class="ri-add-line"></i> 1. POST Create Order</h3>
+            <div class="form-row">
+                <input type="number" id="customerId" placeholder="Customer ID" value="1">
+                <input type="number" id="restaurantId" placeholder="Restaurant ID" value="1">
+                <input type="number" id="addressId" placeholder="Address ID" value="1">
+            </div>
+            <div class="form-row">
+                <input type="number" id="discount" placeholder="Discount Amount" value="0">
+                <input type="text" id="couponCode" placeholder="Coupon Code (optional)">
+            </div>
+            <textarea id="orderNotes" placeholder="Order Notes (optional)" rows="2">Giao hàng nhanh</textarea>
+            
+            <h4>Order Items:</h4>
+            <div id="orderItems">
+                <div class="form-row">
+                    <input type="number" placeholder="Item ID" value="1" class="item-id">
+                    <input type="number" placeholder="Quantity" value="2" class="item-quantity">
+                    <input type="number" placeholder="Unit Price" value="25000" class="item-price">
+                </div>
+                <div class="form-row">
+                    <input type="number" placeholder="Item ID" value="2" class="item-id">
+                    <input type="number" placeholder="Quantity" value="1" class="item-quantity">
+                    <input type="number" placeholder="Unit Price" value="30000" class="item-price">
+                </div>
+            </div>
+            <button onclick="addOrderItem()">+ Add Item</button>
+            <button onclick="testCreateOrder()">Test POST /api/Order</button>
+            <div id="result1" class="result"></div>
+        </div>
+
+        <!-- Test 2: Get Order by ID -->
+        <div class="test-section">
+            <h3><i class="ri-search-line"></i> 2. GET Order by ID</h3>
+            <input type="number" id="getOrderId" placeholder="Enter Order ID" value="1">
+            <button onclick="testGetOrderById()">Test GET /api/Order/{id}</button>
+            <div id="result2" class="result"></div>
+        </div>
+
+        <!-- Test 3: Get Orders with Pagination -->
+        <div class="test-section">
+            <h3><i class="ri-list-check"></i> 3. GET Orders (Pagination)</h3>
+            <div class="form-row">
+                <input type="number" id="page" placeholder="Page" value="1">
+                <input type="number" id="pageSize" placeholder="Page Size" value="5">
+                <input type="number" id="filterCustomerId" placeholder="Customer ID (optional)">
+            </div>
+            <select id="filterStatus">
+                <option value="">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="preparing">Preparing</option>
+                <option value="delivering">Delivering</option>
+                <option value="delivered">Delivered</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+            <button onclick="testGetOrders()">Test GET /api/Order</button>
+            <div id="result3" class="result"></div>
+        </div>
+
+        <!-- Test 4: Update Order Status -->
+        <div class="test-section">
+            <h3><i class="ri-edit-line"></i> 4. PUT Update Order Status</h3>
+            <div class="form-row">
+                <input type="number" id="updateOrderId" placeholder="Order ID" value="1">
+                <select id="newStatus">
+                    <option value="pending">Pending</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="preparing">Preparing</option>
+                    <option value="delivering">Delivering</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+            <button onclick="testUpdateOrderStatus()">Test PUT /api/Order/{id}/status</button>
+            <div id="result4" class="result"></div>
+        </div>
+
+        <!-- Test 5: Get Order Stats -->
+        <div class="test-section">
+            <h3><i class="ri-bar-chart-line"></i> 5. GET Order Statistics</h3>
+            <button onclick="testGetOrderStats()">Test GET /api/Order/stats</button>
+            <div id="result5" class="result"></div>
+        </div>
+
+        <!-- Test 6: Test Product Pagination -->
+        <div class="test-section">
+            <h3><i class="ri-shopping-bag-line"></i> 6. GET Products (Pagination)</h3>
+            <div class="form-row">
+                <input type="number" id="productPage" placeholder="Page" value="1">
+                <input type="number" id="productPageSize" placeholder="Page Size" value="5">
+                <input type="number" id="categoryId" placeholder="Category ID (optional)">
+            </div>
+            <div class="form-row">
+                <input type="text" id="searchKeyword" placeholder="Search keyword (optional)">
+                <select id="availableFilter">
+                    <option value="">All Products</option>
+                    <option value="true">Available Only</option>
+                    <option value="false">Unavailable Only</option>
+                </select>
+            </div>
+            <button onclick="testGetProductsPagination()">Test GET /api/Product (Pagination)</button>
+            <div id="result6" class="result"></div>
+        </div>
+
+        <div style="margin-top: 30px; padding: 20px; background-color: #fff3cd; border-radius: 5px;">
+            <h4>Hướng dẫn sử dụng:</h4>
+            <ol>
+                <li>Đảm bảo backend đang chạy tại <code>http://localhost:5200</code></li>
+                <li>Test theo thứ tự từ trên xuống dưới</li>
+                <li>Tạo order trước, sau đó test các API khác</li>
+                <li>Kiểm tra kết quả trong phần Result</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        const ORDER_API_URL = 'http://localhost:5200/api/Order';
+        const PRODUCT_API_URL = 'http://localhost:5200/api/Product';
+
+        function showResult(elementId, data, isError = false) {
+            const element = document.getElementById(elementId);
+            element.className = 'result ' + (isError ? 'error' : 'success');
+            element.textContent = JSON.stringify(data, null, 2);
+        }
+
+        function addOrderItem() {
+            const container = document.getElementById('orderItems');
+            const newItem = document.createElement('div');
+            newItem.className = 'form-row';
+            newItem.innerHTML = `
+                <input type="number" placeholder="Item ID" class="item-id">
+                <input type="number" placeholder="Quantity" class="item-quantity">
+                <input type="number" placeholder="Unit Price" class="item-price">
+                <button onclick="this.parentElement.remove()" style="background-color: #dc3545;">Remove</button>
+            `;
+            container.appendChild(newItem);
+        }
+
+        async function testCreateOrder() {
+            const orderData = {
+                customerId: parseInt(document.getElementById('customerId').value),
+                restaurantId: parseInt(document.getElementById('restaurantId').value),
+                addressId: parseInt(document.getElementById('addressId').value),
+                discount: parseFloat(document.getElementById('discount').value) || 0,
+                couponCode: document.getElementById('couponCode').value || null,
+                notes: document.getElementById('orderNotes').value || null,
+                items: []
+            };
+
+            // Collect order items
+            const itemRows = document.querySelectorAll('#orderItems .form-row');
+            itemRows.forEach(row => {
+                const itemId = row.querySelector('.item-id').value;
+                const quantity = row.querySelector('.item-quantity').value;
+                const price = row.querySelector('.item-price').value;
+                
+                if (itemId && quantity && price) {
+                    orderData.items.push({
+                        itemId: parseInt(itemId),
+                        quantity: parseInt(quantity),
+                        unitPrice: parseFloat(price)
+                    });
+                }
+            });
+
+            try {
+                const response = await fetch(ORDER_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orderData)
+                });
+                const data = await response.json();
+                showResult('result1', {
+                    status: response.status,
+                    message: response.ok ? 'Order Created Successfully' : 'Error',
+                    data: data
+                }, !response.ok);
+            } catch (error) {
+                showResult('result1', { error: error.message }, true);
+            }
+        }
+
+        async function testGetOrderById() {
+            const id = document.getElementById('getOrderId').value;
+            try {
+                const response = await fetch(`${ORDER_API_URL}/${id}`);
+                const data = await response.json();
+                showResult('result2', {
+                    status: response.status,
+                    message: response.ok ? 'Success' : 'Error',
+                    data: data
+                }, !response.ok);
+            } catch (error) {
+                showResult('result2', { error: error.message }, true);
+            }
+        }
+
+        async function testGetOrders() {
+            const page = document.getElementById('page').value;
+            const pageSize = document.getElementById('pageSize').value;
+            const customerId = document.getElementById('filterCustomerId').value;
+            const status = document.getElementById('filterStatus').value;
+
+            let url = `${ORDER_API_URL}?page=${page}&pageSize=${pageSize}`;
+            if (customerId) url += `&customerId=${customerId}`;
+            if (status) url += `&status=${status}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                showResult('result3', {
+                    status: response.status,
+                    message: response.ok ? 'Success' : 'Error',
+                    data: data
+                }, !response.ok);
+            } catch (error) {
+                showResult('result3', { error: error.message }, true);
+            }
+        }
+
+        async function testUpdateOrderStatus() {
+            const id = document.getElementById('updateOrderId').value;
+            const status = document.getElementById('newStatus').value;
+
+            try {
+                const response = await fetch(`${ORDER_API_URL}/${id}/status`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: status })
+                });
+                const data = await response.json();
+                showResult('result4', {
+                    status: response.status,
+                    message: response.ok ? 'Status Updated Successfully' : 'Error',
+                    data: data
+                }, !response.ok);
+            } catch (error) {
+                showResult('result4', { error: error.message }, true);
+            }
+        }
+
+        async function testGetOrderStats() {
+            try {
+                const response = await fetch(`${ORDER_API_URL}/stats`);
+                const data = await response.json();
+                showResult('result5', {
+                    status: response.status,
+                    message: response.ok ? 'Success' : 'Error',
+                    data: data
+                }, !response.ok);
+            } catch (error) {
+                showResult('result5', { error: error.message }, true);
+            }
+        }
+
+        async function testGetProductsPagination() {
+            const page = document.getElementById('productPage').value;
+            const pageSize = document.getElementById('productPageSize').value;
+            const categoryId = document.getElementById('categoryId').value;
+            const search = document.getElementById('searchKeyword').value;
+            const available = document.getElementById('availableFilter').value;
+
+            let url = `${PRODUCT_API_URL}?page=${page}&pageSize=${pageSize}`;
+            if (categoryId) url += `&categoryId=${categoryId}`;
+            if (search) url += `&search=${encodeURIComponent(search)}`;
+            if (available) url += `&available=${available}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                showResult('result6', {
+                    status: response.status,
+                    message: response.ok ? 'Success' : 'Error',
+                    data: data
+                }, !response.ok);
+            } catch (error) {
+                showResult('result6', { error: error.message }, true);
+            }
+        }
+    </script>
+</body>
+</html>

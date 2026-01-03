@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm Deletion</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/back_end/wwwroot/asset/css/style.css">
+    <style>
+        body 
+        { 
+            background-color: #f8f9fa; 
+        }
+        .admin-panel 
+        { 
+            padding: 20px; 
+            background: white; 
+            box-shadow: 0 0 15px rgba(0,0,0,0.1); 
+            border-radius: 8px; 
+            margin-top: 40px;
+        }
+        .admin-header 
+        { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 1px solid #dee2e6; 
+            padding-bottom: 15px; 
+            margin-bottom: 20px; 
+        }
+        .delete-confirm 
+        { 
+            max-width: 700px; 
+            margin: 30px auto; 
+            text-align: center;
+        }
+        .delete-confirm .main-btn 
+        { 
+            margin: 0 10px; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="admin-panel">
+            <div class="admin-header">
+                <h1>Confirm Deletion</h1>
+            </div>
+            <div class="delete-confirm">
+                <h3>Are you sure you want to delete this product?</h3>
+                <p id="product-name" style="font-weight: bold; font-size: 1.2em; margin: 20px 0;"></p>
+                <div>
+                    <button id="confirm-delete-btn" class="main-btn" style="background-color:#E195AB; border-color:#E195AB">Yes, Delete</button>
+                    <a href="admin_list.html" class="main-btn" style="background-color:#6c757d; border-color:#6c757d">No, Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/fod-del/asset/js/admin_script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            const productId = getUrlParameter('id');
+            const product = await getProductById(productId);
+
+            if (product) {
+                document.getElementById('product-name').textContent = product.name;
+                document.getElementById('confirm-delete-btn').onclick = async function() {
+                    try {
+                        await deleteProduct(productId);
+                        alert('Product deleted successfully!');
+                        window.location.href = 'admin_list.html';
+                    } catch (error) {
+                        alert('Error deleting product: ' + error.message);
+                    }
+                };
+            } else {
+                document.querySelector('.delete-confirm').innerHTML = '<p>Product not found.</p><a href="admin_list.html" class="main-btn">Back to List</a>';
+            }
+        });
+    </script>
+</body>
+</html>
